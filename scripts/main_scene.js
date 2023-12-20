@@ -11,16 +11,28 @@ class MainScene extends Phaser.Scene {
        this.load.image('background', 'assets/background.jpg');
        this.load.image('taro', 'assets/taro.png');
        this.load.image('hanako', 'assets/hanako.png');
+       this.load.image('apple', 'assets/apple.png');
+       this.load.image('orange', 'assets/orange.png');
    }
    // シーン初期化処理
    create() {
-        // 単体画像をシーンに追加(X座標,Y座標,画像名)
-       this.add.image(400, 300, 'background');
-       const taro = this.physics.add.sprite(50, 50, 'taro')
-       const hanako = this.physics.add.sprite(300, 400, 'hanako')
-       this.taro = taro
-       this.hanako = hanako
-       }
+    // 単体画像をシーンに追加(X座標,Y座標,画像名)
+   this.add.image(400, 300, 'background');
+   const taro = this.physics.add.sprite(50, 50, 'taro')
+   const hanako = this.physics.add.sprite(400, 400, 'hanako')
+   this.taro = taro
+   this.hanako = hanako
+   for (let i = 0; i < 6; i++) {
+    let randx = Phaser.Math.Between(25, 775);
+    let randy = Phaser.Math.Between(25, 425);
+    this.add.image(randx, randy, 'apple');
+}
+for (let i = 0; i < 6; i++) {
+    let randxx = Phaser.Math.Between(25, 775);
+    let randyy = Phaser.Math.Between(25, 425);
+    this.add.image(randxx, randyy, 'orange');
+}
+   }
      // 毎フレーム実行される繰り返し処理
         update() {
             // キーボードの情報を取得
