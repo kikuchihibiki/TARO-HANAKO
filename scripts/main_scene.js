@@ -22,16 +22,27 @@ class MainScene extends Phaser.Scene {
    const hanako = this.physics.add.sprite(400, 400, 'hanako')
    this.taro = taro
    this.hanako = hanako
-   for (let i = 0; i < 6; i++) {
+
+let staticGroup = this.physics.add.staticGroup();
+for (let i = 0; i < 6; i++) {
     let randx = Phaser.Math.Between(25, 775);
     let randy = Phaser.Math.Between(25, 425);
-    this.add.image(randx, randy, 'apple');
+    staticGroup.create(randx, randy, 'apple');
 }
 for (let i = 0; i < 6; i++) {
     let randxx = Phaser.Math.Between(25, 775);
     let randyy = Phaser.Math.Between(25, 425);
-    this.add.image(randxx, randyy, 'orange');
+    staticGroup.create(randxx, randyy, 'orange');
 }
+
+this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
+        function collectFruits(p,apple){  
+            this.physics.pause();
+        }
+this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
+        function collectFruits(p,apple){  
+            this.physics.pause();
+        }
    }
      // 毎フレーム実行される繰り返し処理
         update() {
