@@ -36,11 +36,11 @@ for (let i = 0; i < 6; i++) {
 }
 
 this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
-        function collectFruits(p,apple){  
+        function collectFruits(){  
             this.physics.pause();
         }
 this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
-        function collectFruits(p,apple){  
+        function collectFruits(){  
             this.physics.pause();
         }
    }
