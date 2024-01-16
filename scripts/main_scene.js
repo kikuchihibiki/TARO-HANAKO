@@ -45,6 +45,7 @@ this.physics.add.overlap(hanako, staticGroup, this.collectFruits, null, this);
 // taroのゲーム終了処理
 this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
         function collectFruits(){  
+            this.add.text(400, 200, 'GAME OVER', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
             this.physics.pause();
         }
 // this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
@@ -64,21 +65,18 @@ this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
         this.physics.pause();
     }
 }
-countdown(delta){
-    // 毎フレーム事にタイマーを更新
-    this._timeCounter += delta;
-    // _timeCounterが1000になった1秒
-    if(this._timeCounter > 1000) {
-        // 1000ミリ秒経過したのでカウンターをリセット
-        this._timeCounter = 0;
-        // 残り時間を減らす
-        this._leftTime --;
-        // テキストを更新する
-        this._leftTimeText.setText('Time: ' + this._leftTime);
-    }
-    if(this._leftTime <= 0) {
-        // this._leftTime=30;
-        this.quitGame();
+countdown(delta) {
+    // countdownTimer フラグが true の場合にのみタイマーを更新
+    if (this.countdounTimer) {
+        this._timeCounter += delta;
+        if (this._timeCounter > 1000) {
+            this._timeCounter = 0;
+            this._leftTime--;
+            this._leftTimeText.setText('Time: ' + this._leftTime);
+        }
+        if (this._leftTime <= 0) {
+            this.quitGame();
+        }
     }
 }
 quitGame(){
@@ -93,7 +91,7 @@ quitGame(){
     return;
 }
      // 毎フレーム実行される繰り返し処理
-        update() {
+        update(time, delta) {
             // キーボードの情報を取得
             let cursors = this.input.keyboard.createCursorKeys();
             if(cursors.up.isDown){
@@ -118,6 +116,6 @@ quitGame(){
                 this.hanako.setVelocityX(0);// 横方向の速度を0
                 this.hanako.setVelocityY(0);// 縦方向の速度を0
             }
-            
+            this.countdown(delta);
     }
 }
