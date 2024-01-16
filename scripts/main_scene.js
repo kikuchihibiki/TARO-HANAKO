@@ -22,7 +22,7 @@ class MainScene extends Phaser.Scene {
    const hanako = this.physics.add.sprite(400, 400, 'hanako')
    this.taro = taro
    this.hanako = hanako
-
+   this.fruits = 0;
 let staticGroup = this.physics.add.staticGroup();
 for (let i = 0; i < 6; i++) {
     let randx = Phaser.Math.Between(25, 775);
@@ -34,16 +34,29 @@ for (let i = 0; i < 6; i++) {
     let randyy = Phaser.Math.Between(25, 425);
     staticGroup.create(randxx, randyy, 'orange');
 }
+this.physics.add.overlap(hanako, staticGroup, this.collectFruits, null, this);
+// taroのゲーム終了処理
+// this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
+//         function collectFruits(){  
+//             this.physics.pause();
+//         }
+// this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
+//         function collectFruits(){  
+//             this.physics.pause();
+//         }
 
-this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
-        function collectFruits(){  
-            this.physics.pause();
-        }
-this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
-        function collectFruits(){  
-            this.physics.pause();
-        }
    }
+   collectFruits(hanako, fruit) {
+    // 敵を消す
+    fruit.destroy();
+    // カウンターを増やす
+    this.fruits++;
+    // カウンターが10になったらゲームを停止
+    if (this.fruits === 10) {
+        this.add.text(400, 200, 'CLEAR', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        this.physics.pause();
+    }
+}
      // 毎フレーム実行される繰り返し処理
         update() {
             // キーボードの情報を取得
