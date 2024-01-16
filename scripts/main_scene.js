@@ -23,6 +23,13 @@ class MainScene extends Phaser.Scene {
    this.taro = taro
    this.hanako = hanako
    this.fruits = 0;
+   this._timeCounter = 0;  
+        //残り時間
+        this._leftTime = 10;   
+        //文字列
+        this._leftTimeText = this.add.text(300, 30, 'Time: ' + this._leftTime, { fontSize: '28px', fill: '#FFF' }); //時間表示
+        // カウントダウンタイマーを稼働させるか判定するフラグ
+        this.countdounTimer = true;
 let staticGroup = this.physics.add.staticGroup();
 for (let i = 0; i < 6; i++) {
     let randx = Phaser.Math.Between(25, 775);
@@ -36,10 +43,10 @@ for (let i = 0; i < 6; i++) {
 }
 this.physics.add.overlap(hanako, staticGroup, this.collectFruits, null, this);
 // taroのゲーム終了処理
-// this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
-//         function collectFruits(){  
-//             this.physics.pause();
-//         }
+this.physics.add.overlap(taro, staticGroup, collectFruits, null, this);
+        function collectFruits(){  
+            this.physics.pause();
+        }
 // this.physics.add.overlap(hanako, staticGroup, collectFruits, null, this);
 //         function collectFruits(){  
 //             this.physics.pause();
@@ -56,6 +63,34 @@ this.physics.add.overlap(hanako, staticGroup, this.collectFruits, null, this);
         this.add.text(400, 200, 'CLEAR', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         this.physics.pause();
     }
+}
+countdown(delta){
+    // 毎フレーム事にタイマーを更新
+    this._timeCounter += delta;
+    // _timeCounterが1000になった1秒
+    if(this._timeCounter > 1000) {
+        // 1000ミリ秒経過したのでカウンターをリセット
+        this._timeCounter = 0;
+        // 残り時間を減らす
+        this._leftTime --;
+        // テキストを更新する
+        this._leftTimeText.setText('Time: ' + this._leftTime);
+    }
+    if(this._leftTime <= 0) {
+        // this._leftTime=30;
+        this.quitGame();
+    }
+}
+quitGame(){
+    this.add.text(D_WIDTH/3,D_HEIGHT*1/3, 'Game Over!', { fontSize: '32px', fill: '#CDC' });
+     // 色合いを変える
+    this.player1.setTint(0x999999);
+    this.player2.setTint(0xaaaaaa);
+      //物理エンジンを止める
+    this.physics.pause();
+    //カウントダウンタイマーを止めるためにフラグをfalseにする
+    this.countdounTimer = false;
+    return;
 }
      // 毎フレーム実行される繰り返し処理
         update() {
@@ -83,5 +118,6 @@ this.physics.add.overlap(hanako, staticGroup, this.collectFruits, null, this);
                 this.hanako.setVelocityX(0);// 横方向の速度を0
                 this.hanako.setVelocityY(0);// 縦方向の速度を0
             }
+            
     }
 }
